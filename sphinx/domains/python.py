@@ -360,6 +360,7 @@ class PyObject(ObjectDescription[Tuple[str, str]]):
     option_spec: OptionSpec = {
         'noindex': directives.flag,
         'noindexentry': directives.flag,
+        'toctree': directives.unchanged,
         'module': directives.unchanged,
         'canonical': directives.unchanged,
         'annotation': directives.unchanged,
@@ -441,6 +442,7 @@ class PyObject(ObjectDescription[Tuple[str, str]]):
         signode['module'] = modname
         signode['class'] = classname
         signode['fullname'] = fullname
+        signode['displayname'] = name
 
         sig_prefix = self.get_signature_prefix(sig)
         if sig_prefix:
@@ -901,6 +903,7 @@ class PyModule(SphinxDirective):
         'platform': lambda x: x,
         'synopsis': lambda x: x,
         'noindex': directives.flag,
+        'toctree': directives.unchanged,
         'deprecated': directives.flag,
     }
 

@@ -6855,6 +6855,7 @@ class CPPObject(ObjectDescription[ASTDeclaration]):
 
     option_spec: OptionSpec = {
         'noindexentry': directives.flag,
+        'toctree': directives.unchanged,
         'tparam-line-spec': directives.flag,
     }
 
@@ -6945,6 +6946,7 @@ class CPPObject(ObjectDescription[ASTDeclaration]):
             names = self.env.domaindata['cpp']['names']
             if name not in names:
                 names[name] = ast.symbol.docname
+                signode['displayname'] = ast.symbol.declaration.get_display_string()
             # always add the newest id
             assert newestId
             signode['ids'].append(newestId)

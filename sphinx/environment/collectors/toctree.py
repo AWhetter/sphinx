@@ -111,6 +111,30 @@ class TocTreeCollector(EnvironmentCollector):
                     if blist:
                         onlynode += blist.children
                         entries.append(onlynode)
+                elif isinstance(sectionnode, addnodes.desc):
+                    name = sectionnode.get('toctree')
+                    if name is False or not sectionnode.children:
+                        continue
+                    elif not name or name is True:
+                        name = sectionnode.children[0].get('displayname')
+
+                    # The user has not supplied a display name and neither has the node,
+                    # so we don't know how to display this.
+                    if not name:
+                        continue
+
+                    ref_id = sectionnode.children[0].attributes["ids"][0]
+                    nodetext = [nodes.Text(name, name)]
+                    reference = nodes.reference(
+                        '', '', internal=True, refuri=docname,
+                        anchorname='#' + ref_id, *nodetext,
+                    )
+                    para = addnodes.compact_paragraph('', '', reference)
+                    item: Element = nodes.list_item('', para)
+                    sub_item = build_toc(sectionnode, depth + 1)
+                    if sub_item:
+                        item += sub_item
+                    entries.append(item)
                 elif isinstance(sectionnode, nodes.Element):
                     for toctreenode in traverse_in_section(sectionnode,
                                                            addnodes.toctree):
